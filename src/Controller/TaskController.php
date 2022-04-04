@@ -4,36 +4,40 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Service\TaskService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
+#[Route('/tasks')]
 class TaskController extends AbstractController
 {
-    /**
-     * @Route("/tasks", name="task_list")
-     */
-    public function listAction(ManagerRegistry $managerRegistry)
+    #[Route('', name: 'task_list')]
+    public function listAction(TaskService $taskService)
     {
-        return $this->render('task/list.html.twig', ['tasks' => $managerRegistry->getRepository(Task::class)->findAll()]);
+        return $this->render('task/list.html.twig', ['tasks' => $taskService->getTasksTodoList()]);
     }
 
-    /**
-     * @Route("/tasks/create", name="task_create")
-     */
-    public function createAction(Request $request, ManagerRegistry $managerRegistry)
+    #[Route('/done', name: 'task_done_list')]
+    public function listDoneAction(TaskService $taskService)
     {
-        $task = new Task();
+        return $this->render('task/list.html.twig', ['tasks' => $taskService->getTasksDoneList()]);
+    }
+
+    #[Route('/create', name: 'task_create')]
+    public function createAction(Request $request, TaskService $taskService)
+    {
+        $task = $taskService->createTask();
+
+        $this->denyAccessUnlessGranted('add', $task);
+
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $managerRegistry->getManager();
 
-            $em->persist($task);
-            $em->flush();
+            $taskService->addTask($task, $this->getUser());
 
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
 
@@ -43,17 +47,18 @@ class TaskController extends AbstractController
         return $this->render('task/create.html.twig', ['form' => $form->createView()]);
     }
 
-    /**
-     * @Route("/tasks/{id}/edit", name="task_edit")
-     */
-    public function editAction(Task $task, Request $request, ManagerRegistry $managerRegistry)
+    #[Route('/{id}/edit', name: 'task_edit')]
+    public function editAction(Task $task, Request $request, TaskService $taskService)
     {
+        $this->denyAccessUnlessGranted('edit', $task);
+
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $managerRegistry->getManager()->flush();
+
+            $taskService->updateTask($this->getUser());
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
@@ -66,28 +71,28 @@ class TaskController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/tasks/{id}/toggle", name="task_toggle")
-     */
-    public function toggleTaskAction(Task $task, ManagerRegistry $managerRegistry)
+    #[Route('/{id}/toggle', name: 'task_toggle')]
+    public function toggleTaskAction(Task $task, TaskService $taskService)
     {
-        $task->toggle(!$task->isDone());
+        $this->denyAccessUnlessGranted('read', $task);
 
-        $managerRegistry->getManager()->flush();
+        $taskService->toggleTask($task, $this->getUser());
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        if($task->isDone()) {
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        } else {
+            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme non faite.', $task->getTitle()));
+        }
 
         return $this->redirectToRoute('task_list');
     }
 
-    /**
-     * @Route("/tasks/{id}/delete", name="task_delete")
-     */
-    public function deleteTaskAction(Task $task, ManagerRegistry $managerRegistry)
+    #[Route('/{id}/delete', name: 'task_delete')]
+    public function deleteTaskAction(Task $task, TaskService $taskService)
     {
-        $em = $managerRegistry->getManager();
-        $em->remove($task);
-        $em->flush();
+        $this->denyAccessUnlessGranted('delete', $task);
+
+        $taskService->deleteTask($task, $this->getUser());
 
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
