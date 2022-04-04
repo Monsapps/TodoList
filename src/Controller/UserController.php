@@ -4,64 +4,58 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Service\UserService;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+#[Route('/users')]
 class UserController extends AbstractController
 {
-    /**
-     * @Route("/users", name="user_list")
-     */
-    public function listAction(ManagerRegistry $managerRegistry)
+    #[Route('/', name: 'user_list')]
+    public function listAction(UserService $userService)
     {
-        return $this->render('user/list.html.twig', ['users' => $managerRegistry->getRepository(User::class)->findAll()]);
+        return $this->render('user/list.html.twig', ['users' => $userService->getUsersList()]);
     }
 
-    /**
-     * @Route("/users/create", name="user_create")
-     */
-    public function createAction(Request $request, ManagerRegistry $managerRegistry, UserPasswordHasherInterface $passwordHasher)
+    #[Route('/create', name: 'user_create')]
+    public function createAction(Request $request, UserService $userService)
     {
-        $user = new User();
+        $user = $userService->createUser();
+
         $form = $this->createForm(UserType::class, $user);
+
+        // Only admin can create an user and add custom roles
+        if($this->isGranted('ROLE_ADMIN')) {
+            $form = $this->createForm(UserType::class, $user, ['roles' => true]);
+        }
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $managerRegistry->getManager();
-            $password = $passwordHasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($password);
 
-            $em->persist($user);
-            $em->flush();
+            $userService->addUser($user);
 
-            $this->addFlash('success', "L'utilisateur a bien été ajouté.");
+            $this->addFlash('success', 'L\'utilisateur a bien été ajouté.');
 
-            return $this->redirectToRoute('user_list');
+            return $this->redirectToRoute('login');
         }
 
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
-    /**
-     * @Route("/users/{id}/edit", name="user_edit")
-     */
-    public function editAction(User $user, Request $request, ManagerRegistry $managerRegistry, UserPasswordHasherInterface $passwordHasher)
+    #[Route('/{id}/edit', name: 'user_edit')]
+    public function editAction(User $user, Request $request, UserService $userService)
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $user, ['create' => false, 'roles' => true]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordHasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($password);
 
-            $managerRegistry->getManager()->flush();
+            $userService->updateUser($user, $form->get('password')->getData());
 
-            $this->addFlash('success', "L'utilisateur a bien été modifié");
+            $this->addFlash('success', 'L\'utilisateur a bien été modifié');
 
             return $this->redirectToRoute('user_list');
         }

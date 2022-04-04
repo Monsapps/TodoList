@@ -14,7 +14,8 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            provider: doctrine
+            lazy: true
+            pattern: ^/
 
             form_login:
                 login_path: login
@@ -23,9 +24,7 @@ security:
                 always_use_default_target_path: true
                 default_target_path: /
 
-            logout:
-                path: logout
-                target: /
+            logout: ~
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
