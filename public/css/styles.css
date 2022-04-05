@@ -1,0 +1,26 @@
+/*!
+ * Start Bootstrap - Shop Homepage (http://startbootstrap.com/)
+ * Copyright 2013-2016 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
+ */
+
+.main-image {
+  width: 100%;
+}
+
+.card-body {
+  height: 130px;
+  overflow: hidden;
+}
+
+h4 > a {
+  white-space: nowrap;
+}
+
+.card {
+  width: 100%;
+}
+
+footer {
+  margin: 50px 0;
+}
