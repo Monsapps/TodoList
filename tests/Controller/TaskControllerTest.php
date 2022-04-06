@@ -101,7 +101,7 @@ class TaskControllerTest extends WebTestCase
 
         $this->client->submit($form);
 
-        $this->assertSelectorTextContains('li', 'Vous devez saisir un titre.');
+        $this->assertSelectorTextContains('div[class="invalid-feedback d-block"]', 'Vous devez saisir un titre.');
     }
 
     public function testEditActionIsUp(): void
@@ -150,7 +150,7 @@ class TaskControllerTest extends WebTestCase
 
         $this->client->submit($form);
 
-        $this->assertSelectorTextContains('li', 'Vous devez saisir un titre.');
+        $this->assertSelectorTextContains('div[class="invalid-feedback d-block"]', 'Vous devez saisir un titre.');
     }
 
     public function testToggleTaskActionOnOff(): void

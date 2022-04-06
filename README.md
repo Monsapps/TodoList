@@ -13,8 +13,11 @@ ToDoList
     *   apcu & apcu_bc extensions
 
 *   MySQL (>5.7)
+
 *   Apache (>2.4)
+
 *   Symfony bundle (6.0)
+
 *   Composer (>2.2)
 
 ### First step : install project dependencies
@@ -42,5 +45,6 @@ php bin/console doctrine:migrations:migrate
 ```
 
 ## Resources
+
 *   Project source: https://github.com/saro0h/projet8-TodoList
 *   Contributing: todo

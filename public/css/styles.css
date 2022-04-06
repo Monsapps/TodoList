@@ -24,3 +24,7 @@ h4 > a {
 footer {
   margin: 50px 0;
 }
+
+.required::after {
+  content: '*';
+}

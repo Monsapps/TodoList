@@ -156,26 +156,24 @@ class TaskService
             ]);
             return false;
 
-        } else {
+        }
 
-            if($task->getUser() !== null && $task->getUser() != $user) {
-                $this->logger->critical('This condition should not be called', [
-                    'class' => 'TaskService',
-                    'method' => 'deleteTask',
-                    'conditions' => 'Task author is different to current user'
-                ]);
-                return false;
-            }
-    
-            if($task->getUser() === null && !in_array('ROLE_ADMIN', $user->getRoles()) ) {
-                $this->logger->critical('This condition should not be called', [
-                    'class' => 'TaskService',
-                    'method' => 'deleteTask',
-                    'conditions' => 'Task anonymous author can be deleted by admin'
-                ]);
-                return false;
-            }
-            
+        if($task->getUser() !== null && $task->getUser() != $user) {
+            $this->logger->critical('This condition should not be called', [
+                'class' => 'TaskService',
+                'method' => 'deleteTask',
+                'conditions' => 'Task author is different to current user'
+            ]);
+            return false;
+        }
+
+        if($task->getUser() === null && !in_array('ROLE_ADMIN', $user->getRoles()) ) {
+            $this->logger->critical('This condition should not be called', [
+                'class' => 'TaskService',
+                'method' => 'deleteTask',
+                'conditions' => 'Task anonymous author can be deleted by admin'
+            ]);
+            return false;
         }
 
         $entityManager = $this->managerRegistry->getManager();

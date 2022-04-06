@@ -5,10 +5,13 @@
 
 {% block body %}
     <div class="row">
-        {{ form_start(form, {'action' : path('user_edit', {'id' : user.id})}) }}
-        {{ form_widget(form) }}
+        <div class="col-12 col-md-6 mx-auto">
+            {{ form_start(form, {'action' : path('user_edit', {'id' : user.id})}) }}
+            {{ form_widget(form) }}
 
-        <button type="submit" class="btn btn-success pull-right">Modifier</button>
-        {{ form_end(form) }}
+            <button type="submit" class="btn btn-success float-end">Modifier</button>
+            {{ form_end(form) }}
+            (*) Champs requis
+        </div>
     </div>
 {% endblock %}

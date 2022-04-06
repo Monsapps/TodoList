@@ -17,33 +17,61 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, ['label' => "Nom d'utilisateur"]);
+            ->add('username', TextType::class, [
+                'label' => 'Nom d\'utilisateur',
+                'row_attr' => [
+                    'class' => 'form-floating'
+                ],
+                'attr' => [
+                    'class' => 'form-control my-2',
+                    'placeholder' => 'Votre nom d\'utilisateur'
+                ]
+            ]);
+
+        $passMapped = false;
+        $passRequired = false;
 
         // In mode create we have a password mapped to the user
         if($options['create']) {
-            $builder   
-                ->add('password', RepeatedType::class, [
-                    'type' => PasswordType::class,
-                    'invalid_message' => 'Les deux mots de passe doivent correspondre.',
-                    'required' => true,
-                    'first_options'  => ['label' => 'Mot de passe'],
-                    'second_options' => ['label' => 'Tapez le mot de passe à nouveau'],
-                ]);
-
-        } else {
-            $builder   
-                ->add('password', RepeatedType::class, [
-                    'mapped' => false,
-                    'type' => PasswordType::class,
-                    'invalid_message' => 'Les deux mots de passe doivent correspondre.',
-                    'required' => false,
-                    'first_options'  => ['label' => 'Mot de passe'],
-                    'second_options' => ['label' => 'Tapez le mot de passe à nouveau'],
-                ]);
+            $passMapped = true;
+            $passRequired = true;
         }
+
+        $builder   
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'Les deux mots de passe doivent correspondre.',
+                'required' => $passRequired,
+                'mapped' => $passMapped,
+                'first_options'  => ['label' => 'Mot de passe',
+                'row_attr' => [
+                    'class' => 'form-floating'
+                ],
+                'attr' => [
+                    'class' => 'form-control my-2',
+                    'placeholder' => 'Mot de passe'
+                ]],
+                'second_options' => ['label' => 'Tapez le mot de passe à nouveau',
+                'row_attr' => [
+                    'class' => 'form-floating'
+                ],
+                'attr' => [
+                    'class' => 'form-control my-2',
+                    'placeholder' => 'Vérification du mot de passe'
+                ]]
+        ]);
         
         $builder
-            ->add('email', EmailType::class, ['label' => 'Adresse email']);
+            ->add('email', EmailType::class, [
+                'label' => 'Adresse email',
+                'row_attr' => [
+                    'class' => 'form-floating'
+                ],
+                'attr' => [
+                    'class' => 'form-control my-2',
+                    'placeholder' => 'Votre email'
+                ]
+            ]);
 
         if($options['roles']) {
             
