@@ -1,18 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list">{% endblock %}
+{% block header_img %}<img class="main-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list">{% endblock %}
 
 {% block body %}
-    <a href="{{ path('task_create') }}" class="btn btn-info pull-right">Créer une tâche</a>
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('task_create') }}" class="btn btn-info float-end">Créer une tâche</a>
+        </div>
+    </div>
     <div class="row">
         {% for task in tasks %}
-        <div class="col-sm-4 col-lg-4 col-md-4">
-            <div class="thumbnail">
-                <div class="caption">
-                    <h4 class="pull-right">
-                        {% if task.isDone %}<span class="glyphicon glyphicon-ok"></span>{% else %}<span class="glyphicon glyphicon-remove"></span>{% endif %}
-                    </h4>
-                    <h4><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a></h4>
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+            <div class="card m-1">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h4 class="p2"><a href="{{ path('task_edit', {'id' : task.id }) }}" class="link-secondary">{{ task.title }}</a></h4>
+                        <h4 class="p2">
+                        {% if task.isDone %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                            </svg>
+                        {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                                <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                            </svg>
+                        {% endif %}
+                        </h4>
+                    </div>
+                    <div class="">
                     <p>
                         Créée par
                         {% if task.user is not null %}
@@ -22,16 +38,21 @@
                         {% endif %}
                     </p>
                     <p>{{ task.content }}</p>
+                    </div>
                 </div>
-                <div>
+                <div class="d-flex justify-content-end">
                     <form action="{{ path('task_toggle', {'id' : task.id }) }}">
-                        <button class="btn btn-success btn-sm pull-right">
-                            {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
+                        <button class="btn btn-success btn-sm m-1">
+                            {% if not task.isDone %}
+                                Marquer comme faite
+                            {% else %}
+                                Marquer non terminée
+                            {% endif %}
                         </button>
                     </form>
                     {% if is_granted('delete', task) %}
                         <form action="{{ path('task_delete', {'id' : task.id }) }}">
-                            <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
+                            <button data-delete-task class="btn btn-danger btn-sm m-1">Supprimer</button>
                         </form>
                     {% endif %}
                 </div>
@@ -39,8 +60,31 @@
         </div>
         {% else %}
             <div class="alert alert-warning" role="alert">
-                Il n'y a pas encore de tâche enregistrée. <a href="{{ path('task_create') }}" class="btn btn-warning pull-right">Créer une tâche</a>
+                Il n'y a pas encore de tâche enregistrée. <a href="{{ path('task_create') }}" class="btn btn-warning float-end">Créer une tâche</a>
             </div>
         {% endfor %}
     </div>
+
+    <div class="modal" id="modal-window" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Suppression de la tâche</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes vous sûr de vouloir supprimer cette tâche?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" id="delete-task" class="btn btn-danger">Supprimer</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = function () {
+            deleteTasksListener();
+        }
+    </script>
 {% endblock %}

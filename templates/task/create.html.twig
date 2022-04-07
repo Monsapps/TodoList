@@ -1,13 +1,21 @@
 {% extends 'base.html.twig' %}
 
+{% block header_img %}<img class="main-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list">{% endblock %}
+
 {% block body %}
     <div class="row">
-        {{ form_start(form, {'action' : path('task_create')}) }}
-            {{ form_widget(form) }}
+        <div class="col-12 col-md-6 mx-auto">
+            {{ form_start(form, {'action' : path('task_create')}) }}
+                {{ form_widget(form) }}
 
-            <button type="submit" class="btn btn-success pull-right">Ajouter</button>
-        {{ form_end(form) }}
-
-        <a href="{{ path('task_list') }}" class="btn btn-primary">Retour à la liste des tâches</a>
+                <button type="submit" class="btn btn-success float-end">Ajouter</button>
+            {{ form_end(form) }}
+            (*) Champs requis
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col">
+            <a href="{{ path('task_list') }}" class="btn btn-primary">Retour à la liste des tâches</a>
+        </div>
     </div>
 {% endblock %}

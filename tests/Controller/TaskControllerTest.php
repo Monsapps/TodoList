@@ -34,7 +34,7 @@ class TaskControllerTest extends WebTestCase
 
         // TaskFixtures create 2 tasks
         // Todo faire plus general??
-        $this->assertEquals(2,  $crawler->filter('.thumbnail')->count());
+        $this->assertEquals(2,  $crawler->filter('.card')->count());
     }
 
     public function testUserCanDeleteOwnTask(): void
@@ -43,7 +43,7 @@ class TaskControllerTest extends WebTestCase
 
         $crawler = $this->client->request('GET', '/tasks');
         // TaskFixtures create 1 task with user
-        $this->assertEquals(1,  $crawler->filter('button:contains("Supprimer")')->count());
+        $this->assertEquals(1,  $crawler->filter('button[data-delete-task]:contains("Supprimer")')->count());
     }
 
     public function testTaskDoneListIsUpForUser(): void
@@ -101,7 +101,7 @@ class TaskControllerTest extends WebTestCase
 
         $this->client->submit($form);
 
-        $this->assertSelectorTextContains('li', 'Vous devez saisir un titre.');
+        $this->assertSelectorTextContains('div[class="invalid-feedback d-block"]', 'Vous devez saisir un titre.');
     }
 
     public function testEditActionIsUp(): void
@@ -150,7 +150,7 @@ class TaskControllerTest extends WebTestCase
 
         $this->client->submit($form);
 
-        $this->assertSelectorTextContains('li', 'Vous devez saisir un titre.');
+        $this->assertSelectorTextContains('div[class="invalid-feedback d-block"]', 'Vous devez saisir un titre.');
     }
 
     public function testToggleTaskActionOnOff(): void
