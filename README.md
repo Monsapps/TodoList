@@ -5,9 +5,13 @@
 
 ### Installation requirements
 *   PHP (>8.0)
+
 *   MySQL (>5.7)
+
 *   Apache (>2.4)
+
 *   Symfony bundle (6.0)
+
 *   Composer (>2.2)
 
 ### First step : install project dependencies
