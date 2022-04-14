@@ -18,23 +18,32 @@ To submit a new pull request you have to follow some rules:
 
 ### Project structure
 *   bin ( binary files )
-*   config ( config folder of symfony framework )
-*   migrations ( database configuration files)
-*   public ( css, javascript... )
-*   src
-    * Controller ( controllers )
-    * DataFixtures ( fixtures for dataset )
-    * Entity ( entities )
-    * Form ( form types )
-    * Repository ( repositories )
-    * Security ( access control files )
-    * Service ( services )
-*   templates ( twig files )
-*   tests
-    * Controller ( functional tests for controllers )
-    * Service ( unit tests for services )
-    * Type ( unit test for forms )
 
+*   config ( config folder of symfony framework )
+
+*   migrations ( database configuration files)
+
+*   public ( css, javascript... )
+
+*   src
+
+    *   Controller ( controllers )
+    *   DataFixtures ( fixtures for dataset )
+    *   Entity ( entities )
+    *   Form ( form types )
+    *   Repository ( repositories )
+    *   Security ( access control files )
+    *   Service ( services )
+    
+*   templates ( twig files )
+
+*   tests
+
+    *   Controller ( functional tests for controllers )
+
+    *   Service ( unit tests for services )
+
+    *   Type ( unit test for forms )
 
 ### Test Environment
 To write tests, you need to create an environment test for your database.
