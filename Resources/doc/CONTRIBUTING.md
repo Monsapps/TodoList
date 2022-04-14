@@ -13,7 +13,7 @@ If you want to solve an issue, create a new pull request with a fix by following
 ## Pull Request
 To submit a new pull request you have to follow some rules:
 *   Write and run unit and functionnal tests to expect at least 70% code coverage.
-*   [PSR-1 and PSR-4 recommandation](https://www.php-fig.org/psr/#numerical-index)
+*   [PSR-1 and PSR-4 recommandations](https://www.php-fig.org/psr/#numerical-index)
 *   [The Symfony Framework Best Practices](https://symfony.com/doc/current/best_practices.html)
 
 ### Project structure
