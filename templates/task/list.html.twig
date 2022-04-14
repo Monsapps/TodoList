@@ -14,7 +14,13 @@
             <div class="card m-1">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <h4 class="p2"><a href="{{ path('task_edit', {'id' : task.id }) }}" class="link-secondary">{{ task.title }}</a></h4>
+                        <h4 class="p2">
+                        {% if is_granted('edit', task) %}
+                            <a href="{{ path('task_edit', {'id' : task.id }) }}" class="link-secondary">{{ task.title }}</a></p>
+                        {% else %}
+                            {{ task.title }}
+                        {% endif %}
+                        </h4>
                         <h4 class="p2">
                         {% if task.isDone %}
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">

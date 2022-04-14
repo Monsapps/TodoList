@@ -23,10 +23,12 @@ class UserController extends AbstractController
     {
         $user = $userService->createUser();
 
+        $this->denyAccessUnlessGranted('register', $user);
+
         $form = $this->createForm(UserType::class, $user);
 
         // Only admin can create an user and add custom roles
-        if($this->isGranted('ROLE_ADMIN')) {
+        if($this->isGranted('register_roles', $user)) {
             $form = $this->createForm(UserType::class, $user, ['roles' => true]);
         }
 
@@ -38,6 +40,9 @@ class UserController extends AbstractController
 
             $this->addFlash('success', 'L\'utilisateur a bien été ajouté.');
 
+            if($this->isGranted('manage', $user)) {
+                return $this->redirectToRoute('user_list');
+            }
             return $this->redirectToRoute('login');
         }
 
@@ -47,6 +52,8 @@ class UserController extends AbstractController
     #[Route('/{id}/edit', name: 'user_edit')]
     public function editAction(User $user, Request $request, UserService $userService)
     {
+        $this->denyAccessUnlessGranted('manage', $user);
+
         $form = $this->createForm(UserType::class, $user, ['create' => false, 'roles' => true]);
 
         $form->handleRequest($request);
