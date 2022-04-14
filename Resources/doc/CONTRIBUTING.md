@@ -34,7 +34,6 @@ To submit a new pull request you have to follow some rules:
     *   Security ( access control files )
     *   Service ( services )
 
-
 *   templates ( twig files )
 
 *   tests
