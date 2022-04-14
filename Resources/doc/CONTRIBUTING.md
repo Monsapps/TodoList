@@ -26,7 +26,6 @@ To submit a new pull request you have to follow some rules:
 *   public ( css, javascript... )
 
 *   src
-
     *   Controller ( controllers )
     *   DataFixtures ( fixtures for dataset )
     *   Entity ( entities )
@@ -34,15 +33,14 @@ To submit a new pull request you have to follow some rules:
     *   Repository ( repositories )
     *   Security ( access control files )
     *   Service ( services )
-    
+
+
 *   templates ( twig files )
 
 *   tests
 
     *   Controller ( functional tests for controllers )
-
     *   Service ( unit tests for services )
-
     *   Type ( unit test for forms )
 
 ### Test Environment
