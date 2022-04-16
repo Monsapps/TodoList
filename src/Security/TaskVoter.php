@@ -53,29 +53,29 @@ class TaskVoter extends Voter
         switch($attribute) {
             case self::VIEW: 
             case self::ADD:
-            case self::EDIT:
             case self::READ:
                 if ($this->security->isGranted('ROLE_USER')) {
                     return true;
                 }
+            case self::EDIT:
             case self::DELETE:
-                return $this->canDelete($subject, $user);
+                return $this->isAble($subject, $user);
             
         }
 
         throw new \LogicException('This code should not be reached!');
     }
 
-    private function canDelete(Task $task, User $user): bool
+    private function isAble(Task $task, User $user): bool
     {
         if($task->getUser() == null) {
-            // Only admin can delete anonymous task
+            // Only admin is able to UD anonymous task
             if($this->security->isGranted('ROLE_ADMIN')) {
                 return true;
             }
 
         } elseif($task->getUser() == $user) {
-            // Only owner can delete task
+            // Only owner can UD task
             return true;
         }
 

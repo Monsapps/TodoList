@@ -13,7 +13,7 @@ class TaskControllerTest extends WebTestCase
 
     protected function setUp(): void
     {
-        $this->client = static::createClient([], ['HTTP_HOST' => 'todolist.local']);
+        $this->client = static::createClient();
         $this->userRepo = static::getContainer()->get(ManagerRegistry::class)->getRepository(User::class);
     }
 
@@ -33,7 +33,6 @@ class TaskControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/tasks');
 
         // TaskFixtures create 2 tasks
-        // Todo faire plus general??
         $this->assertEquals(2,  $crawler->filter('.card')->count());
     }
 
@@ -133,6 +132,8 @@ class TaskControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         $this->assertSelectorTextContains('strong', 'Superbe !');
+
+        $this->assertSelectorExists('div[class="alert alert-success"]');
     }
 
     public function testEditActionSubmitInvalidForm(): void

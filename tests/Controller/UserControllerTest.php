@@ -13,7 +13,7 @@ class UserControllerTest extends WebTestCase
 
     protected function setUp(): void
     {
-        $this->client = static::createClient([], ['HTTP_HOST' => 'todolist.local']);
+        $this->client = static::createClient();
         $this->userRepo = static::getContainer()->get(ManagerRegistry::class)->getRepository(User::class);
     }
 

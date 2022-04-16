@@ -17,8 +17,7 @@ composer install
 ```
 
 ### Second step : Create .env.local file
-*   Copy the content of .env file in your new .env.local file
-*   Edit .env.local file with your database server info
+*   Update .env.local file with your database server info
 ```text
 DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=5.7"
 ```
@@ -35,4 +34,5 @@ php bin/console doctrine:migrations:migrate
 ```
 
 ## Resources
-*   Project source : https://github.com/saro0h/projet8-TodoList
+*   [saro0h / projet8-TodoList](https://github.com/saro0h/projet8-TodoList)
+*   [Contributing guide](Resources/doc/CONTRIBUTING.md)
